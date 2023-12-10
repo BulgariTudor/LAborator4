@@ -1,0 +1,161 @@
+#include <iostream>
+#include <cstring>
+
+using namespace std;
+
+class Mobilier {
+protected:
+    float pret;
+    char *stil;
+    char *domeniuUtilizare;
+
+public:
+    // Constructor implicit
+    Mobilier() : pret(0), stil(nullptr), domeniuUtilizare(nullptr) {}
+
+    // Constructor cu parametri
+    Mobilier(float p, const char *s, const char *d) : pret(p) {
+        stil = new char[strlen(s) + 1];
+        strcpy(stil, s);
+
+        domeniuUtilizare = new char[strlen(d) + 1];
+        strcpy(domeniuUtilizare, d);
+    }
+
+    // Destructor
+    ~Mobilier() {
+        delete[] stil;
+        delete[] domeniuUtilizare;
+    }
+
+    // Funcție pentru afișare
+    void afisareDetalii() const {
+        cout << "Pret: " << pret << " lei\n";
+        cout << "Stil: " << stil << "\n";
+        cout << "Domeniu de utilizare: " << domeniuUtilizare << "\n";
+    }
+
+    // Operator de atribuire
+    Mobilier& operator=(const Mobilier &m) {
+        if (this != &m) {
+            pret = m.pret;
+
+            delete[] stil;
+            stil = new char[strlen(m.stil) + 1];
+            strcpy(stil, m.stil);
+
+            delete[] domeniuUtilizare;
+            domeniuUtilizare = new char[strlen(m.domeniuUtilizare) + 1];
+            strcpy(domeniuUtilizare, m.domeniuUtilizare);
+        }
+        return *this;
+    }
+};
+
+// Clasa derivată Masa
+class Masa : public Mobilier {
+public:
+    Masa() : Mobilier() {}
+    Masa(float p, const char *s, const char *d) : Mobilier(p, s, d) {}
+};
+
+// Clasa derivată Scaun
+class Scaun : public Mobilier {
+public:
+    Scaun() : Mobilier() {}
+    Scaun(float p, const char *s, const char *d) : Mobilier(p, s, d) {}
+};
+
+int main() {
+    // Exemplu de utilizare
+    Masa masa1(250, "Modern", "Bucatarie");
+    Scaun scaun1(120, "Clasic", "Oficiu");
+
+    cout << "Detalii masa:\n";
+    masa1.afisareDetalii();
+
+    cout << "\nDetalii scaun:\n";
+    scaun1.afisareDetalii();
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+#include <iostream>
+using namespace std;
+
+class Garaj {
+private:
+    float suprafata;
+
+public:
+    // Constructor
+    Garaj(float suprafata) : suprafata(suprafata) {}
+
+    // Metoda de acces pentru suprafata garajului
+    float getSuprafata() const {
+        return suprafata;
+    }
+};
+
+class Casa {
+private:
+    int odai;
+    float suprafataBucatarie;
+    Garaj garaj;
+
+public:
+    // Constructor
+    Casa(int odai, float suprafataBucatarie, float suprafataGaraj)
+        : odai(odai), suprafataBucatarie(suprafataBucatarie), garaj(suprafataGaraj) {}
+
+    // Metode de acces pentru odai, suprafata bucatariei si obiectul de tip Garaj
+    int getOdai() const {
+        return odai;
+    }
+
+    float getSuprafataBucatarie() const {
+        return suprafataBucatarie;
+    }
+
+    Garaj getGaraj() const {
+        return garaj;
+    }
+};
+
+class Vila : public Casa {
+private:
+    float marimeLot;
+
+public:
+    // Constructor
+    Vila(int odai, float suprafataBucatarie, float suprafataGaraj, float marimeLot)
+        : Casa(odai, suprafataBucatarie, suprafataGaraj), marimeLot(marimeLot) {}
+
+    // Destructor
+    ~Vila() {
+        cout << "Destructor Vila\n";
+    }
+
+    // Metoda pentru a afișa informații despre vilă
+    void afiseazaInformatii() const {
+        cout << "Vila are " << getOdai() << " odai, o bucatarie de " << getSuprafataBucatarie()
+             << " mp, un garaj de " << getGaraj().getSuprafata() << " mp si un lot de pamant de " << marimeLot << " mp.\n";
+    }
+};
+
+int main() {
+    // Exemplu de utilizare
+    Vila vila(5, 25.5, 50.0, 1000.0);
+    vila.afiseazaInformatii();
+
+    return 0;
